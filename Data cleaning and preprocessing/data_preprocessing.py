@@ -55,10 +55,10 @@ Version
 """
 import pandas as pd
 import numpy as np
-from scipy import stats
-from sklearn.preprocessing import StandardScaler, MinMaxScaler
-import missingno as msno  # Optional: for visualizing missing data
-
+from scipy import stats  # type: ignore
+from sklearn.preprocessing import StandardScaler  # type: ignore
+#from sklearn.preprocessing import StandardScaler, MinMaxScaler # type: ignore
+#import missingno as msno  # Optional: for visualizing missing data
 
 def load_data(filepath):
     """
@@ -80,7 +80,7 @@ def load_data(filepath):
     """
     return pd.read_csv(filepath)
 
-def handle_missing_values(df):
+def handle_missing_values(dataframe):
     """
     Handle missing values in numeric columns by filling them with the mean.
     
@@ -89,7 +89,7 @@ def handle_missing_values(df):
     
     Parameters
     ----------
-    df : pd.DataFrame
+    dataframe : pd.DataFrame
         DataFrame containing the data with potential missing values.
     
     Returns
@@ -106,9 +106,9 @@ def handle_missing_values(df):
     --------
     >>> df_cleaned = handle_missing_values(df)
     """
-    return df.fillna(df.mean())
+    return dataframe.fillna(dataframe.mean())
 
-def remove_outliers(df):
+def remove_outliers(dataframe):
     """
     Remove outliers from the dataset using the Z-score method.
     
@@ -117,7 +117,7 @@ def remove_outliers(df):
     
     Parameters
     ----------
-    df : pd.DataFrame
+    dataframe : pd.DataFrame
         DataFrame containing numeric data.
     
     Returns
@@ -136,10 +136,10 @@ def remove_outliers(df):
     --------
     >>> df_no_outliers = remove_outliers(df)
     """
-    z_scores = np.abs(stats.zscore(df))
-    return df[(z_scores < 3).all(axis=1)]
+    z_scores = np.abs(np.array(stats.zscore(dataframe)))
+    return dataframe[(z_scores < 3).all(axis=1)]
 
-def scale_data(df):
+def scale_data(dataframe):
     """
     Scale numeric data using standardization (Z-score normalization).
     
@@ -149,7 +149,7 @@ def scale_data(df):
     
     Parameters
     ----------
-    df : pd.DataFrame
+    dataframe : pd.DataFrame
         DataFrame containing numeric data to be scaled.
     
     Returns
@@ -167,9 +167,9 @@ def scale_data(df):
     >>> df_scaled = scale_data(df)
     """
     scaler = StandardScaler()
-    return pd.DataFrame(scaler.fit_transform(df), columns=df.columns)
+    return pd.DataFrame(scaler.fit_transform(dataframe), columns=dataframe.columns)
 
-def encode_categorical(df, categorical_columns):
+def encode_categorical(dataframe, categorical_columns):
     """
     Encode categorical variables using one-hot encoding.
     
@@ -178,7 +178,7 @@ def encode_categorical(df, categorical_columns):
     
     Parameters
     ----------
-    df : pd.DataFrame
+    dataframe : pd.DataFrame
         DataFrame containing the data.
     categorical_columns : list of str
         List of column names to be one-hot encoded.
@@ -198,15 +198,15 @@ def encode_categorical(df, categorical_columns):
     For columns with many categories, consider using ordinal encoding
     or target encoding to avoid creating too many columns.
     """
-    return pd.get_dummies(df, columns=categorical_columns)
+    return pd.get_dummies(dataframe, columns=categorical_columns)
 
-def save_data(df, output_filepath):
+def save_data(dataframe, output_filepath):
     """
     Save DataFrame to a CSV file.
     
     Parameters
     ----------
-    df : pd.DataFrame
+    dataframe : pd.DataFrame
         DataFrame to be saved.
     output_filepath : str
         Path where the CSV file will be saved.
@@ -223,8 +223,7 @@ def save_data(df, output_filepath):
     -----
     The index is not saved to the CSV file (index=False).
     """
-    df.to_csv(output_filepath, index=False)
-
+    dataframe.to_csv(output_filepath, index=False)
 
 # Example usage:
 df = load_data('your_dataset.csv')

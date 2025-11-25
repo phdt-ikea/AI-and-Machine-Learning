@@ -226,9 +226,9 @@ def save_data(dataframe, output_filepath):
     dataframe.to_csv(output_filepath, index=False)
 
 # Example usage:
-df = load_data('your_dataset.csv')
-df = handle_missing_values(df)
-df = remove_outliers(df)
-df = scale_data(df)
-df = encode_categorical(df, ['categorical_column_name'])
-save_data(df, 'cleaned_preprocessed_data.csv')
+#df = load_data('your_dataset.csv')
+#df = handle_missing_values(df)
+#df = remove_outliers(df)
+#df = scale_data(df)
+#df = encode_categorical(df, ['categorical_column_name'])
+#save_data(df, 'cleaned_preprocessed_data.csv')

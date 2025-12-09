@@ -81,14 +81,13 @@ for X, y in test_dataloader:
     break
 
 # Creating Models
-device = (
-    torch.accelerator.current_accelerator().type
-    if torch.accelerator.is_available()
-    and torch.accelerator.current_accelerator() is not None
-    else "cpu"
-)
-print(f"Using {device} device")
-
+if torch.cuda.is_available():
+    device = torch.device("cuda")
+elif hasattr(torch.backends, "mps") and torch.backends.mps.is_available():
+    device = torch.device("mps")
+else:
+    device = torch.device("cpu")
+print(f"Using {device.type} device")
 
 # Define model
 class NeuralNetwork(nn.Module):
@@ -169,7 +168,7 @@ optimizer = torch.optim.SGD(model.parameters(), lr=1e-3)
 # In a single training loop, the model makes predictions on the training dataset
 # (fed to it in batches), and backpropagates the prediction error to adjust the
 # model's parameters.
-def train(dataloader, model, loss_fn, optimizer):
+def train(dataloader, net, criterion, opt):
     """
     Train the model for one epoch.
     
@@ -180,11 +179,11 @@ def train(dataloader, model, loss_fn, optimizer):
     ----------
     dataloader : torch.utils.data.DataLoader
         DataLoader containing the training dataset batches.
-    model : nn.Module
+    net : nn.Module
         The neural network model to train.
-    loss_fn : nn.Module
-        Loss function (criterion) to compute prediction error.
-    optimizer : torch.optim.Optimizer
+    criterion : nn.Module
+        Loss function to compute prediction error.
+    opt : torch.optim.Optimizer
         Optimizer to update model parameters.
     
     Returns
@@ -206,26 +205,25 @@ def train(dataloader, model, loss_fn, optimizer):
     ...
     """
     size = len(dataloader.dataset)
-    model.train()
-    for batch, (X, y) in enumerate(dataloader):
-        X, y = X.to(device), y.to(device)
+    net.train()
+    for batch, (inputs, targets) in enumerate(dataloader):
+        inputs, targets = inputs.to(device), targets.to(device)
 
         # Compute prediction error
-        pred = model(X)
-        loss = loss_fn(pred, y)
+        pred = net(inputs)
+        loss = criterion(pred, targets)
 
         # Backpropagation
         loss.backward()
-        optimizer.step()
-        optimizer.zero_grad()
+        opt.step()
+        opt.zero_grad()
 
         if batch % 100 == 0:
-            loss, current = loss.item(), (batch + 1) * len(X)
+            loss, current = loss.item(), (batch + 1) * len(inputs)
             print(f"loss: {loss:>7f}  [{current:>5d}/{size:>5d}]")
 
-
 # We also check the model's performance against the test dataset to ensure it is learning.
-def test(dataloader, model, loss_fn):
+def test(dataloader, net, criterion):
     """
     Evaluate the model on the test dataset.
     
@@ -236,10 +234,10 @@ def test(dataloader, model, loss_fn):
     ----------
     dataloader : torch.utils.data.DataLoader
         DataLoader containing the test dataset batches.
-    model : nn.Module
+    net : nn.Module
         The trained neural network model to evaluate.
-    loss_fn : nn.Module
-        Loss function (criterion) to compute prediction error.
+    criterion : nn.Module
+        Loss function to compute prediction error.
     
     Returns
     -------
@@ -261,14 +259,14 @@ def test(dataloader, model, loss_fn):
     """
     size = len(dataloader.dataset)
     num_batches = len(dataloader)
-    model.eval()
+    net.eval()
     test_loss, correct = 0, 0
     with torch.no_grad():
-        for X, y in dataloader:
-            X, y = X.to(device), y.to(device)
-            pred = model(X)
-            test_loss += loss_fn(pred, y).item()
-            correct += (pred.argmax(1) == y).type(torch.float).sum().item()
+        for inputs, targets in dataloader:
+            inputs, targets = inputs.to(device), targets.to(device)
+            pred = net(inputs)
+            test_loss += criterion(pred, targets).item()
+            correct += (pred.argmax(1) == targets).type(torch.float).sum().item()
     test_loss /= num_batches
     correct /= size
     print(
@@ -280,8 +278,8 @@ def test(dataloader, model, loss_fn):
 # the model learns parameters to make better predictions. We print the model’s accuracy
 # and loss at each epoch; we’d like to see the accuracy increase and the loss decrease
 # with every epoch.
-epochs = 5
-for t in range(epochs):
+EPOCHS = 5
+for t in range(EPOCHS):
     print(f"Epoch {t + 1}\n-------------------------------")
     train(train_dataloader, model, loss_fn, optimizer)
     test(test_dataloader, model, loss_fn)

@@ -209,5 +209,6 @@ marimo/_static/
 marimo/_lsp/
 __marimo__/
 
-# Local dataets
+# Local datasets
 datasets/
+Building Intelligent Troubleshooting Agents/results/

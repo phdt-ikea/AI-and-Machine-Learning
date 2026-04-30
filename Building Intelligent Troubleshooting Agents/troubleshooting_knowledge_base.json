@@ -1,0 +1,26 @@
+{
+    "slow_internet": {
+        "symptom": "My internet is very slow.",
+        "solution": "Try restarting your router, moving closer to it, and checking if other devices are using bandwidth."
+    },
+    "app_crashing": {
+        "symptom": "The app keeps crashing on startup.",
+        "solution": "Update the app to the latest version, clear cache if possible, and restart your device."
+    },
+    "wifi_not_connecting": {
+        "symptom": "I can't connect to Wi-Fi.",
+        "solution": "Check if Wi-Fi is enabled, restart your router, and reconnect using the correct password."
+    },
+    "login_issue": {
+        "symptom": "I can't log into my account.",
+        "solution": "Verify your credentials, reset your password if needed, and check if your account is locked."
+    },
+    "printer_not_working": {
+        "symptom": "My printer is not printing.",
+        "solution": "Ensure the printer is powered on, check for paper jams, and verify the correct printer is selected."
+    },
+    "slow_computer": {
+        "symptom": "My computer is running very slow.",
+        "solution": "Close unused programs, restart your computer, and scan for malware or viruses."
+    }
+}

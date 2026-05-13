@@ -7,6 +7,10 @@
         "symptom": "The app keeps crashing on startup.",
         "solution": "Update the app to the latest version, clear cache if possible, and restart your device."
     },
+    "software_crashing": {
+        "symptom": "The software keeps crashing on my computer.",
+        "solution": "Update the software to the latest version and restart your computer."
+    },
     "wifi_not_connecting": {
         "symptom": "I can't connect to Wi-Fi.",
         "solution": "Check if Wi-Fi is enabled, restart your router, and reconnect using the correct password."
@@ -22,5 +26,25 @@
     "slow_computer": {
         "symptom": "My computer is running very slow.",
         "solution": "Close unused programs, restart your computer, and scan for malware or viruses."
+    },
+    "restart_router": {
+        "symptom": "My internet is not working.",
+        "solution": "Please restart your router and check if the problem persists."
+    },
+    "reset_network_settings": {
+        "symptom": "Network issues persist.",
+        "solution": "Try resetting your network settings. Instructions are available in your system settings under 'Network Reset'."
+    },
+    "check_cables": {
+        "symptom": "No internet connection.",
+        "solution": "Ensure all network cables are securely connected."
+    },
+    "isp_contact": {
+        "symptom": "Internet issues continue.",
+        "solution": "If the issue continues, please contact your Internet Service Provider (ISP) for further assistance."
+    },
+    "clear_cache": {
+        "symptom": "Web pages are not loading correctly.",
+        "solution": "Clearing your browser cache can sometimes resolve connectivity issues."
     }
 }

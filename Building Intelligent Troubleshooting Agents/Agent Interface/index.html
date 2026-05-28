@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbot Interface</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="chat-container">
+        <div id="messages" class="messages"></div>
+        <div class="user-input">
+            <input type="text" id="userInput" placeholder="Type your message...">
+            <button onclick="sendMessage()">Send</button>
+        </div>
+        <div class="quick-replies">
+            <button onclick="quickReply('What is your name')">What is your name</button>
+            <button onclick="quickReply('Hello')">Hello</button>
+            <button onclick="quickReply('Goodbye')">Goodbye</button>
+        </div>
+    </div>
+    <script src="chatbot.js"></script>
+</body>
+</html>
